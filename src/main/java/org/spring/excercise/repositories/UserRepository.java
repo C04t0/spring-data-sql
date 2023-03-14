@@ -20,9 +20,8 @@ public class UserRepository {
     }
 
     public void updateUser(User user) {
-        String sqlUpdate = "UPDATE users SET name=?, email=? WHERE id = :id";
-
-        jdbc.update(sqlUpdate, user.getId());
+        String sqlUpdate = "UPDATE users SET name=?, email=? WHERE id = ?";
+        jdbc.update(sqlUpdate, user.getName(), user.getEmail(), user.getId());
     }
 
     public void storeUsers(User user) {
@@ -34,17 +33,15 @@ public class UserRepository {
         String sqlSelect = "SELECT * from users";
 
         RowMapper<User> rowMapper = (r, i) -> {
-            User rowObject = new User();
-            rowObject.setId(r.getInt("id"));
-            rowObject.setName(r.getString("name"));
-            rowObject.setEmail(r.getString("email"));
+            User rowObject =
+                    new User(r.getInt("id"), r.getString("name"), r.getString("email"));
             return rowObject;
         };
         return jdbc.query(sqlSelect, rowMapper);
     }
 
-    public void deleteUser(User user) {
-        String sqlDelete = "DELETE from users WHERE id = :id";
-        jdbc.update(sqlDelete);
+    public void deleteUser(String id) {
+        String sqlDelete = "DELETE from users WHERE id = ?";
+        jdbc.update(sqlDelete, id);
     }
 }

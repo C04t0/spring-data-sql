@@ -33,9 +33,9 @@ public class UserController {
         userRepository.updateUser(user);
     }
 
-    @DeleteMapping
-    public void deleteUser(@RequestBody User user) {
-        userRepository.deleteUser(user);
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable String id) {
+        userRepository.deleteUser(id);
     }
 
 }
